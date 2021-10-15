@@ -9,34 +9,44 @@
 
 int main(int argc, char *argv[])
 {
-    QApplication a(argc, argv);
-    MainWindow w;
-
     boost::program_options::variables_map vm;
-    if(CheckCommandLineArgs( argc, argv, vm ))
+    if( CheckCommandLineArgs( argc, argv, vm ) )
     {
-        QFile file( (vm[c_szArgPathFile].as<std::string>()).c_str() );
-        if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
+        if( vm.count(c_szArgPathFile) )
         {
-            std::cout << Cons( "Error open file" ) << std::endl;
-            return 1;
-        }
+            QFile file( (vm[c_szArgPathFile].as<std::string>()).c_str() );
+            if (file.open(QIODevice::ReadOnly | QIODevice::Text))
+            {
+                QTextStream qtsInFile(&file);
+                if(vm.count(c_szArgTypeCoding))
+                {
+                    qtsInFile.setCodec((vm[c_szArgTypeCoding].as<std::string>()).c_str());
+                }
+                QString qsResText = qtsInFile.readAll();
 
-        QTextStream qtsInFile(&file);
-        if(vm.size() == 2)
-        {
-            qtsInFile.setCodec((vm[c_szArgTypeCoding].as<std::string>()).c_str());
+                QApplication a(argc, argv);
+                MainWindow w;
+                if(vm.count(c_szArgTitle))
+                {
+                    w.setWindowTitle((vm[c_szArgTitle].as<std::string>()).c_str());
+                }
+                else
+                {
+                    std::string sTitle = file.fileName().toStdString();
+                    sTitle = sTitle.substr(sTitle.find_last_of("\\/") + 1,std::string::npos);
+                    w.setWindowTitle(sTitle.c_str());
+                }
+                w.SetText( qsResText );
+                w.show();
+                return a.exec();
+            }
+            else
+            {
+                std::cout << Cons( "Error open file" ) << std::endl;
+                return 1;
+            }
         }
-        else
-        {
-            std::cout << Cons( "No file encoding" ) << std::endl;
-        }
-
-        QString qsRes = qtsInFile.readAll();
-
-        w.SetText( qsRes );
-        w.show();
     }
 
-    return a.exec();
+    return 0;
 }

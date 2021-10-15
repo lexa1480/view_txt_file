@@ -8,6 +8,7 @@
 const char c_szArgHelp[] = "help";
 const char c_szArgPathFile[] = "file";
 const char c_szArgTypeCoding[] = "charset";
+const char c_szArgTitle[] = "title";
 
 inline bool CheckCommandLineArgs(int ac, char* av[], boost::program_options::variables_map& vm )
 {
@@ -16,11 +17,12 @@ inline bool CheckCommandLineArgs(int ac, char* av[], boost::program_options::var
     bool bContinueExecution = false;
     try
     {
-        po::options_description desc("INF> Allowed options");
+        po::options_description desc("INF> This program outputs the contents of a text file.\nAllowed options");
         desc.add_options()
-                (c_szArgHelp, "Produce help message")
-                (c_szArgPathFile, po::value<std::string>(), "Path to file")
-                (c_szArgTypeCoding, po::value<std::string>(), "Charset type")
+                ("help,h", "Produce help message")
+                ("file,f", po::value<std::string>(), "Path to file")
+                ("charset,c", po::value<std::string>(), "Charset type")
+                ("title,t", po::value<std::string>(), "Title window")
                 ;
 
         po::parsed_options parsed = po::command_line_parser(ac, av).options(desc).allow_unregistered().run();
