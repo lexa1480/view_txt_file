@@ -42,11 +42,6 @@ int main(int argc, char *argv[])
                     w.setWindowTitle( sTitle.c_str() );
                 }
 
-                if(vm.count(c_szArgNoMove))
-                {
-                    w.setWindowFlags(Qt::CustomizeWindowHint);
-                }
-
                 w.show();
                 if(vm.count(c_szArgNoResize))
                 {
