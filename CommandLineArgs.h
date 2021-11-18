@@ -10,6 +10,7 @@ const char c_szArgPathFile[] = "file";
 const char c_szArgTypeCoding[] = "charset";
 const char c_szArgTitle[] = "title";
 const char c_szArgNoResize[] = "no_resize";
+const char c_szArgFont[] = "font";
 
 inline bool CheckCommandLineArgs(int ac, char* av[], boost::program_options::variables_map& vm )
 {
@@ -25,6 +26,7 @@ inline bool CheckCommandLineArgs(int ac, char* av[], boost::program_options::var
                 ("charset,c", po::value<std::string>(), "Charset type")
                 ("title,t", po::value<std::string>(), "Title window")
                 ("no_resize,r", "No resize window")
+                ("font", po::value<std::string>(), "Set font text")
                 ;
 
         po::parsed_options parsed = po::command_line_parser(ac, av).options(desc).allow_unregistered().run();

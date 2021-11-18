@@ -42,6 +42,15 @@ int main(int argc, char *argv[])
                     w.setWindowTitle( sTitle.c_str() );
                 }
 
+                QString sFont = "Monospace";
+                if(vm.count(c_szArgFont))
+                {
+                    sFont = vm[c_szArgFont].as<std::string>().c_str();
+                }
+                QFont font(sFont);
+                font.setStyleHint(QFont::Monospace);
+                a.setFont(font);
+
                 w.show();
                 if(vm.count(c_szArgNoResize))
                 {
